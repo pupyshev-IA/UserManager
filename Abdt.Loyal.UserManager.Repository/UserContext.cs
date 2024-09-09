@@ -1,5 +1,6 @@
 ﻿using Abdt.Loyal.UserManager.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace Abdt.Loyal.UserManager.Repository
@@ -40,6 +41,9 @@ namespace Abdt.Loyal.UserManager.Repository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging();
+
             base.OnConfiguring(optionsBuilder);
         }
     }

@@ -1,6 +1,13 @@
+using Abdt.Loyal.UserManager.Repository;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+var dbConnection = builder.Configuration.GetConnectionString("PostgresConnection");
+if (string.IsNullOrWhiteSpace(dbConnection))
+    throw new ArgumentException(nameof(dbConnection));
 
+builder.Services.AddDbContext<UserContext>(options => options.UseNpgsql(dbConnection));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

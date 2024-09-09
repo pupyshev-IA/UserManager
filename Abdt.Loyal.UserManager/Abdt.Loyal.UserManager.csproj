@@ -29,4 +29,8 @@
     <Folder Include="DTO\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Abdt.Loyal.UserManager.Repository\Abdt.Loyal.UserManager.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
