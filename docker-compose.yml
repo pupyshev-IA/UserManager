@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  abdt.loyal.usermanager:
+    image: ${DOCKER_REGISTRY-}abdtloyalusermanager
+    container_name: user-manager
+    build:
+      context: .
+      dockerfile: Abdt.Loyal.UserManager/Dockerfile
+    # ports:
+    #   - "5000:5000"
+    # expose:
+    #   - 5000
+    # depends_on:
+    #   - postgres
+    #   - redis
