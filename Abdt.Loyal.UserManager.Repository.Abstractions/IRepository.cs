@@ -20,14 +20,14 @@
         /// Удаляет заданный элемент из хранилища. Если элемент не найден, то ошибки не будет.
         /// </summary>
         /// <param name="id"></param>
-        Task Delete(Guid id);
+        Task Delete(long id);
 
         /// <summary>
         /// Находит элемент по идентификатору в хранилище.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Возвращает найденный элемент или null если элемент не найден</returns>
-        Task<T?> GetById(Guid id);
+        Task<T?> GetById(long id);
 
         /// <summary>
         /// Находит элемент по email в хранилище.

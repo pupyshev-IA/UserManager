@@ -23,7 +23,7 @@ namespace Abdt.Loyal.UserManager.Repository
         }
 
         /// <inheritdoc />
-        public async Task<User?> GetById(Guid id)
+        public async Task<User?> GetById(long id)
         {
             var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             return user;
@@ -48,7 +48,7 @@ namespace Abdt.Loyal.UserManager.Repository
         }
 
         /// <inheritdoc />
-        public async Task Delete(Guid id)
+        public async Task Delete(long id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user is not null)

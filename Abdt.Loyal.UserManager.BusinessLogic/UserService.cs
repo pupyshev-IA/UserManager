@@ -57,7 +57,7 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
             return await _repository.Update(item);
         }
 
-        public Task Delete(Guid id)
+        public Task Delete(long id)
         {
             return _repository.Delete(id);
         }

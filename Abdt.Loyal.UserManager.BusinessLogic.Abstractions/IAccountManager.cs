@@ -8,6 +8,6 @@
 
         Task<T> Update(T item);
 
-        Task Delete(Guid id);
+        Task Delete(long id);
     }
 }
