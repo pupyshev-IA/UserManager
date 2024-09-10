@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Abdt.Loyal.UserManager.Domain\Abdt.Loyal.UserManager.Domain.csproj" />
+    <ProjectReference Include="..\Abdt.Loyal.UserManager.Repository.Abstractions\Abdt.Loyal.UserManager.Repository.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
