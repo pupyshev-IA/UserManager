@@ -30,7 +30,14 @@ namespace Abdt.Loyal.UserManager.Repository
         }
 
         /// <inheritdoc />
-        public async Task<User?> Update(User item)
+        public async Task<User?> GetByEmail(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            return user;
+        }
+
+        /// <inheritdoc />
+        public async Task<User> Update(User item)
         {
             ArgumentNullException.ThrowIfNull(item, nameof(item));
 

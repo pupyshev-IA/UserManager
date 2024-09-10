@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Abdt.Loyal.UserManager.Domain\Abdt.Loyal.UserManager.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

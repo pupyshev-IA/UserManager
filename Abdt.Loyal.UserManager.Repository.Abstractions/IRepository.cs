@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="item"></param>
         /// <returns>Возвращает обновленный элемент или null если элемент в хранилище не найден</returns>
-        Task<T?> Update(T item);
+        Task<T> Update(T item);
 
         /// <summary>
         /// Удаляет заданный элемент из хранилища. Если элемент не найден, то ошибки не будет.
@@ -28,5 +28,12 @@
         /// <param name="id"></param>
         /// <returns>Возвращает найденный элемент или null если элемент не найден</returns>
         Task<T?> GetById(Guid id);
+
+        /// <summary>
+        /// Находит элемент по email в хранилище.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>Возвращает найденный элемент или null если элемент не найден</returns>
+        Task<T?> GetByEmail(string email);
     }
 }

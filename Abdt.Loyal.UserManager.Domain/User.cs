@@ -12,6 +12,8 @@
 
         public string PasswordHash { get; set; }
 
+        public string Salt { get; set; }
+
         public DateTimeOffset RegistredAt { get; set; } = DateTimeOffset.UtcNow;
     }
 }
