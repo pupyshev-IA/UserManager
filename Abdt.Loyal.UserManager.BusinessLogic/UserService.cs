@@ -8,48 +8,42 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
     {
         private readonly IRepository<User> _repository;
         private readonly IPasswordHasher _passwordHasher;
-        private readonly ITokenService _tokenService;
+        private const string AuthErrorMessage = "Invalid login or password";
 
-        public UserService(IRepository<User> repository, IPasswordHasher passwordHasher, ITokenService tokenService)
+        public UserService(IRepository<User> repository, IPasswordHasher passwordHasher)
         {
             _repository = repository;
             _passwordHasher = passwordHasher;
-            _tokenService = tokenService;
         }
 
-        public async Task<User> Register(User user)
+        public async Task<Result<User>> Register(User user)
         {
-            if (user == null)
-                throw new ArgumentNullException(nameof(user));
-
             var (passwordHash, salt) = _passwordHasher.HashPassword(user.PasswordHash);
 
             user.PasswordHash = passwordHash;
             user.Salt = salt;
 
-            return await _repository.Add(user);
+            var registredUser = await _repository.Add(user);
+            return Result<User>.Success(registredUser);
         }
 
-        public async Task<string?> Login(string login, string password)
+        public async Task<Result<User>> Login(string login, string password)
         {
             var user = await _repository.GetByEmail(login);
             if (user is null)
-                throw new ArgumentNullException(nameof(user));
+                return Result<User>.Failure(AuthErrorMessage);
 
             var isValidPassword = _passwordHasher.VerifyPassword(password, user.PasswordHash, user.Salt);
             if (!isValidPassword)
-                return null;
+                return Result<User>.Failure(AuthErrorMessage);
 
-            var token = _tokenService.GenerateToken(user);
-            return token;
+            return Result<User>.Success(user);
         }
 
-        public async Task<User> Update(User item)
+        public async Task<Result<User>> Update(User user)
         {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item));
-
-            return await _repository.Update(item);
+            var updatedUser = await _repository.Update(user);
+            return Result<User>.Success(updatedUser);
         }
 
         public Task Delete(long id)

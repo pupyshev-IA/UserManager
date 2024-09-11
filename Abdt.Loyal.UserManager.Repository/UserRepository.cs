@@ -39,9 +39,7 @@ namespace Abdt.Loyal.UserManager.Repository
         /// <inheritdoc />
         public async Task<User> Update(User item)
         {
-            ArgumentNullException.ThrowIfNull(item, nameof(item));
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == item.Id);
-            ArgumentNullException.ThrowIfNull(user, nameof(user));
 
             user.Name = item.Name;
             user.Email = item.Email;

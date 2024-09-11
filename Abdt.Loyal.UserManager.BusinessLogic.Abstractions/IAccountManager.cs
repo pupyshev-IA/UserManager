@@ -1,12 +1,14 @@
-﻿namespace Abdt.Loyal.UserManager.BusinessLogic.Abstractions
+﻿using Abdt.Loyal.UserManager.Domain;
+
+namespace Abdt.Loyal.UserManager.BusinessLogic.Abstractions
 {
     public interface IAccountManager<T> where T : class
     {
-        Task<T> Register(T item);
+        Task<Result<T>> Register(T item);
 
-        Task<string?> Login(string login, string password);
+        Task<Result<T>> Login(string login, string password);
 
-        Task<T> Update(T item);
+        Task<Result<T>> Update(T item);
 
         Task Delete(long id);
     }

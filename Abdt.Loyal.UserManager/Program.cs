@@ -18,7 +18,6 @@ builder.Services.AddAutoMapper(typeof(ControllersMappingProfile));
 builder.Services.AddScoped<IAccountManager<User>, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

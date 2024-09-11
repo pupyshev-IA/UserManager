@@ -3,7 +3,6 @@ using Abdt.Loyal.UserManager.Domain;
 using Abdt.Loyal.UserManager.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace Abdt.Loyal.UserManager.Controllers
 {
@@ -24,37 +23,27 @@ namespace Abdt.Loyal.UserManager.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserDtoRegister userDtoRegister)
         {
-            if (userDtoRegister is null)
-                return BadRequest();
-
             var user = _mapper.Map<User>(userDtoRegister);
-            var registredUser = await _service.Register(user);
+            var result = await _service.Register(user);
 
-            return Created(new Uri("api/v1/users/", UriKind.Relative), _mapper.Map<UserDto>(registredUser));
+            return Created(new Uri("api/v1/users/", UriKind.Relative), _mapper.Map<UserDto>(result.Value));
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserDtoLogin userDtoLogin)
         {
-            if (userDtoLogin is null)
-                return BadRequest();
-
-            var jwt = await _service.Login(userDtoLogin.Email, userDtoLogin.PasswordHash);
-
-            if (string.IsNullOrWhiteSpace(jwt))
+            var user = await _service.Login(userDtoLogin.Email, userDtoLogin.PasswordHash);
+            if (user is null)
                 return Unauthorized();
 
-            return Ok(jwt);
+            return Ok(user);
         }
 
         [HttpPut]
         [Route("update")]
         public async Task<IActionResult> Update([FromBody] UserDtoUpdate userDtoUpdate)
         {
-            if (userDtoUpdate is null)
-                return BadRequest();
-
             var user = _mapper.Map<User>(userDtoUpdate);
             var updatedUser = await _service.Update(user);
 
