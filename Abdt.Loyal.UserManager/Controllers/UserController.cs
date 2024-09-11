@@ -40,7 +40,7 @@ namespace Abdt.Loyal.UserManager.Controllers
             if (!result.IsSuccess)
                 return Unauthorized(result.Error);
 
-            return Ok(result.Value);
+            return Ok(_mapper.Map<UserDto>(result.Value));
         }
 
         [HttpPut]
