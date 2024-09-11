@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Abdt.Loyal.UserManager.Repository.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20240910185307_User_Entity_Initialization")]
+    [Migration("20240911083215_User_Entity_Initialization")]
     partial class User_Entity_Initialization
     {
         /// <inheritdoc />
@@ -59,6 +59,9 @@ namespace Abdt.Loyal.UserManager.Repository.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
