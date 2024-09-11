@@ -18,6 +18,10 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
 
         public async Task<Result<User>> Register(User user)
         {
+            var existingUser = await _repository.GetByEmail(user.Email);
+            if (existingUser is not null)
+                return Result<User>.Failure("User with this email already exists");
+
             var (passwordHash, salt) = _passwordHasher.HashPassword(user.PasswordHash);
 
             user.PasswordHash = passwordHash;
@@ -42,6 +46,10 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
 
         public async Task<Result<User>> Update(User user)
         {
+            var existingUser = await _repository.GetById(user.Id);
+            if (existingUser is null)
+                return Result<User>.Failure("User with this id doesn't exist");
+
             var updatedUser = await _repository.Update(user);
             return Result<User>.Success(updatedUser);
         }

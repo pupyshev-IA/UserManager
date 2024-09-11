@@ -26,6 +26,9 @@ namespace Abdt.Loyal.UserManager.Controllers
             var user = _mapper.Map<User>(userDtoRegister);
             var result = await _service.Register(user);
 
+            if (!result.IsSuccess)
+                return Conflict(result.Error);
+
             return Created(new Uri("api/v1/users/", UriKind.Relative), _mapper.Map<UserDto>(result.Value));
         }
 
@@ -33,11 +36,11 @@ namespace Abdt.Loyal.UserManager.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserDtoLogin userDtoLogin)
         {
-            var user = await _service.Login(userDtoLogin.Email, userDtoLogin.PasswordHash);
-            if (user is null)
-                return Unauthorized();
+            var result = await _service.Login(userDtoLogin.Email, userDtoLogin.PasswordHash);
+            if (!result.IsSuccess)
+                return Unauthorized(result.Error);
 
-            return Ok(user);
+            return Ok(result.Value);
         }
 
         [HttpPut]
@@ -45,15 +48,21 @@ namespace Abdt.Loyal.UserManager.Controllers
         public async Task<IActionResult> Update([FromBody] UserDtoUpdate userDtoUpdate)
         {
             var user = _mapper.Map<User>(userDtoUpdate);
-            var updatedUser = await _service.Update(user);
+            var result = await _service.Update(user);
 
-            return Ok(_mapper.Map<UserDto>(updatedUser));
+            if (!result.IsSuccess)
+                return NotFound(result.Error);
+
+            return Ok(_mapper.Map<UserDto>(result.Value));
         }
 
         [HttpDelete]
         [Route("delete/{id}")]
         public async Task<IActionResult> Delete([FromRoute] long id)
         {
+            if (id < 0)
+                return BadRequest();
+
             await _service.Delete(id);
             return NoContent();
         }
