@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Abdt.Loyal.UserManager.Repository.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20240909143026_Adding_User_Entity")]
-    partial class Adding_User_Entity
+    [Migration("20240910185307_User_Entity_Initialization")]
+    partial class User_Entity_Initialization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,10 +54,11 @@ namespace Abdt.Loyal.UserManager.Repository.Migrations
                     b.Property<DateTimeOffset>("RegistredAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });

@@ -19,20 +19,10 @@ namespace Abdt.Loyal.UserManager.Repository
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.HasIndex(e => e.Email).IsUnique();
-
                 entity.Property(p => p.Id).ValueGeneratedOnAdd();
-
-                entity.Property(p => p.Name)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(p => p.Email)
-                    .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(p => p.PasswordHash)
-                    .IsRequired();
+                entity.Property(p => p.Name).HasMaxLength(100);
+                entity.Property(p => p.Email).HasMaxLength(255);
+                entity.Property(p => p.PasswordHash).IsRequired();
             });
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

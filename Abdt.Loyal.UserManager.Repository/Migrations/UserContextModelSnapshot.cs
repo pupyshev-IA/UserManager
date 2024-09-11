@@ -24,9 +24,11 @@ namespace Abdt.Loyal.UserManager.Repository.Migrations
 
             modelBuilder.Entity("Abdt.Loyal.UserManager.Domain.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -49,10 +51,11 @@ namespace Abdt.Loyal.UserManager.Repository.Migrations
                     b.Property<DateTimeOffset>("RegistredAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });

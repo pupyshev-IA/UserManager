@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Abdt.Loyal.UserManager.Repository.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20240910092247_User_Id_changed")]
-    partial class User_Id_changed
+    [Migration("20240910192925_User_Entity_Configurations_changed")]
+    partial class User_Entity_Configurations_changed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,11 @@ namespace Abdt.Loyal.UserManager.Repository.Migrations
 
             modelBuilder.Entity("Abdt.Loyal.UserManager.Domain.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -52,10 +54,11 @@ namespace Abdt.Loyal.UserManager.Repository.Migrations
                     b.Property<DateTimeOffset>("RegistredAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });

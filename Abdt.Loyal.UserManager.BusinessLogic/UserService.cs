@@ -17,22 +17,17 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
             _tokenService = tokenService;
         }
 
-        public async Task<User> Register(User item)
+        public async Task<User> Register(User user)
         {
-            if (item == null)
-                throw new ArgumentNullException(nameof(item));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
-            var (passwordHash, salt) = _passwordHasher.HashPassword(item.PasswordHash);
+            var (passwordHash, salt) = _passwordHasher.HashPassword(user.PasswordHash);
 
-            var newUser = new User
-            {
-                Name = item.Name,
-                Email = item.Email,
-                Salt = salt,
-                RegistredAt = item.RegistredAt
-            };
+            user.PasswordHash = passwordHash;
+            user.Salt = salt;
 
-            return await _repository.Add(newUser);
+            return await _repository.Add(user);
         }
 
         public async Task<string?> Login(string login, string password)
@@ -43,7 +38,7 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
 
             var isValidPassword = _passwordHasher.VerifyPassword(password, user.PasswordHash, user.Salt);
             if (!isValidPassword)
-                throw new ArgumentException(nameof(login));
+                return null;
 
             var token = _tokenService.GenerateToken(user);
             return token;

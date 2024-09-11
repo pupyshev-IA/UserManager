@@ -12,12 +12,13 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
         public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("TODO: CHANGE THIS STRING");
+            var key = Encoding.ASCII.GetBytes("MySuperSecretKeyThatVeryHardToGuess");
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Email, user.Email)
                 }),

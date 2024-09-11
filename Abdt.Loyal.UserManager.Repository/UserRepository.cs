@@ -40,11 +40,16 @@ namespace Abdt.Loyal.UserManager.Repository
         public async Task<User> Update(User item)
         {
             ArgumentNullException.ThrowIfNull(item, nameof(item));
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == item.Id);
+            ArgumentNullException.ThrowIfNull(user, nameof(user));
 
-            _context.Update(item);
+            user.Name = item.Name;
+            user.Email = item.Email;
+            user.PhoneNumber = item.PhoneNumber;
+
             await _context.SaveChangesAsync();
 
-            return item;
+            return user;
         }
 
         /// <inheritdoc />

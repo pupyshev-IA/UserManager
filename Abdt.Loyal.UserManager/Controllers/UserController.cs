@@ -3,6 +3,7 @@ using Abdt.Loyal.UserManager.Domain;
 using Abdt.Loyal.UserManager.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Abdt.Loyal.UserManager.Controllers
 {
