@@ -8,12 +8,14 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
     {
         private readonly IRepository<User> _repository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly ITokenService _tokenService;
         private const string AuthErrorMessage = "Invalid login or password";
 
-        public UserService(IRepository<User> repository, IPasswordHasher passwordHasher)
+        public UserService(IRepository<User> repository, IPasswordHasher passwordHasher, ITokenService tokenService)
         {
             _repository = repository;
             _passwordHasher = passwordHasher;
+            _tokenService = tokenService;
         }
 
         public async Task<Result<User>> Register(User user)
@@ -31,17 +33,19 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
             return Result<User>.Success(registredUser);
         }
 
-        public async Task<Result<User>> Login(string login, string password)
+        public async Task<Result<string>> Login(string login, string password)
         {
             var user = await _repository.GetByEmail(login);
             if (user is null)
-                return Result<User>.Failure(AuthErrorMessage);
+                return Result<string>.Failure(AuthErrorMessage);
 
             var isValidPassword = _passwordHasher.VerifyPassword(password, user.PasswordHash, user.Salt);
             if (!isValidPassword)
-                return Result<User>.Failure(AuthErrorMessage);
+                return Result<string>.Failure(AuthErrorMessage);
 
-            return Result<User>.Success(user);
+            var jwtToken = _tokenService.GenerateToken(user);
+
+            return Result<string>.Success(jwtToken);
         }
 
         public async Task<Result<User>> Update(User user)

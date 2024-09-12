@@ -6,7 +6,7 @@ namespace Abdt.Loyal.UserManager.BusinessLogic.Abstractions
     {
         Task<Result<T>> Register(T item);
 
-        Task<Result<T>> Login(string login, string password);
+        Task<Result<string>> Login(string login, string password);
 
         Task<Result<T>> Update(T item);
 
