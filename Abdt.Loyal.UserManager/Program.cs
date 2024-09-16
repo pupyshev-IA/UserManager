@@ -5,8 +5,13 @@ using Abdt.Loyal.UserManager.Domain;
 using Abdt.Loyal.UserManager.Repository;
 using Abdt.Loyal.UserManager.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(LogLevel.Trace);
+builder.Host.UseNLog();
 
 var dbConnection = builder.Configuration.GetConnectionString("PostgresConnection");
 if (string.IsNullOrWhiteSpace(dbConnection))
