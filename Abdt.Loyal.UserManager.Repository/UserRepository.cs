@@ -42,7 +42,6 @@ namespace Abdt.Loyal.UserManager.Repository
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == item.Id);
 
             user.Name = item.Name;
-            user.Email = item.Email;
             user.PhoneNumber = item.PhoneNumber;
 
             await _context.SaveChangesAsync();

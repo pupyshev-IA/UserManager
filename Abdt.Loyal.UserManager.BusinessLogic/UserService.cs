@@ -4,11 +4,11 @@ using Abdt.Loyal.UserManager.Repository.Abstractions;
 
 namespace Abdt.Loyal.UserManager.BusinessLogic
 {
-    public class UserService : IAccountManager<User>
+    public class UserService : IUserService<User>
     {
         private readonly IRepository<User> _repository;
         private readonly IPasswordHasher _passwordHasher;
-        private const string AuthErrorMessage = "Invalid login or password";
+        private const string UserErrorMessage = "User with this id does not exist";
 
         public UserService(IRepository<User> repository, IPasswordHasher passwordHasher)
         {
@@ -16,7 +16,7 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<Result<User>> Register(User user)
+        public async Task<Result<User>> Add(User user)
         {
             var existingUser = await _repository.GetByEmail(user.Email);
             if (existingUser is not null)
@@ -31,15 +31,11 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
             return Result<User>.Success(registredUser);
         }
 
-        public async Task<Result<User>> Login(string login, string password)
+        public async Task<Result<User>> Get(long id)
         {
-            var user = await _repository.GetByEmail(login);
+            var user = await _repository.GetById(id);
             if (user is null)
-                return Result<User>.Failure(AuthErrorMessage);
-
-            var isValidPassword = _passwordHasher.VerifyPassword(password, user.PasswordHash, user.Salt);
-            if (!isValidPassword)
-                return Result<User>.Failure(AuthErrorMessage);
+                return Result<User>.Failure(UserErrorMessage);
 
             return Result<User>.Success(user);
         }
@@ -48,7 +44,7 @@ namespace Abdt.Loyal.UserManager.BusinessLogic
         {
             var existingUser = await _repository.GetById(user.Id);
             if (existingUser is null)
-                return Result<User>.Failure("User with this id doesn't exist");
+                return Result<User>.Failure(UserErrorMessage);
 
             var updatedUser = await _repository.Update(user);
             return Result<User>.Success(updatedUser);

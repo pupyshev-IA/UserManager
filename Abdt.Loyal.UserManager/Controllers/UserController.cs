@@ -10,21 +10,21 @@ namespace Abdt.Loyal.UserManager.Controllers
     [Route("api/v1/users")]
     public class UserController : ControllerBase
     {
-        private readonly IAccountManager<User> _service;
+        private readonly IUserService<User> _service;
         private readonly IMapper _mapper;
 
-        public UserController(IAccountManager<User> service, IMapper mapper)
+        public UserController(IUserService<User> service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
         }
 
         [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register([FromBody] UserDtoRegister userDtoRegister)
+        [Route("add")]
+        public async Task<IActionResult> AddUser([FromBody] UserDtoRegister userDtoRegister)
         {
             var user = _mapper.Map<User>(userDtoRegister);
-            var result = await _service.Register(user);
+            var result = await _service.Add(user);
 
             if (!result.IsSuccess)
                 return Conflict(result.Error);
@@ -32,13 +32,16 @@ namespace Abdt.Loyal.UserManager.Controllers
             return Created(new Uri("api/v1/users/", UriKind.Relative), _mapper.Map<UserDto>(result.Value));
         }
 
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserDtoLogin userDtoLogin)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetUserById([FromRoute] long id)
         {
-            var result = await _service.Login(userDtoLogin.Email, userDtoLogin.PasswordHash);
+            if (id < 0)
+                return BadRequest();
+
+            var result = await _service.Get(id);
             if (!result.IsSuccess)
-                return Unauthorized(result.Error);
+                return NotFound(result.Error);
 
             return Ok(_mapper.Map<UserDto>(result.Value));
         }
@@ -57,8 +60,8 @@ namespace Abdt.Loyal.UserManager.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{id}")]
-        public async Task<IActionResult> Delete([FromRoute] long id)
+        [Route("delete")]
+        public async Task<IActionResult> Delete([FromQuery] long id)
         {
             if (id < 0)
                 return BadRequest();

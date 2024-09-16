@@ -15,7 +15,7 @@ if (string.IsNullOrWhiteSpace(dbConnection))
 builder.Services.AddDbContext<UserContext>(options => options.UseNpgsql(dbConnection));
 builder.Services.AddAutoMapper(typeof(ControllersMappingProfile));
 
-builder.Services.AddScoped<IAccountManager<User>, UserService>();
+builder.Services.AddScoped<IUserService<User>, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
